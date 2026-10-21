@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · LUXE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080c;
+    --surface:rgba(255,255,255,.035);
+    --surface-2:rgba(255,255,255,.06);
+    --border:rgba(255,255,255,.08);
+    --border-hi:rgba(255,255,255,.18);
+    --text:#f4f4f5;
+    --text-dim:#a1a1aa;
+    --text-dimmer:#6b6b76;
+    --grad:linear-gradient(135deg,#6366f1 0%,#a855f7 55%,#ec4899 100%);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background-color:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%,rgba(99,102,241,.18),transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 90%,rgba(168,85,247,.10),transparent 60%);
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+  }
+
+  /* ---------- Login ---------- */
+  .login-wrap{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:24px;
+  }
+  .login-card{
+    width:100%;max-width:400px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:40px 32px;
+    backdrop-filter:blur(20px);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+    animation:rise .6s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-8px)}
+    75%{transform:translateX(8px)}
+  }
+  .shake{animation:shake .4s}
+  .lock-icon{
+    width:52px;height:52px;border-radius:16px;
+    background:var(--grad);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 24px;
+    box-shadow:0 12px 32px -8px rgba(99,102,241,.7);
+  }
+  .login-card h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:24px;text-align:center;margin-bottom:8px;letter-spacing:-.02em;
+  }
+  .login-card .sub{
+    text-align:center;color:var(--text-dim);font-size:14px;margin-bottom:32px;
+  }
+
+  /* ---------- Forms ---------- */
+  .field{margin-bottom:16px}
+  .field label{
+    display:block;font-size:12px;font-weight:600;
+    color:var(--text-dim);margin-bottom:8px;
+    text-transform:uppercase;letter-spacing:.06em;
+  }
+  .field input, .link-entry input{
+    width:100%;padding:12px 14px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text);font-family:inherit;font-size:14px;
+    outline:none;
+    transition:border-color .2s,background .2s,box-shadow .2s;
+  }
+  .field input:focus, .link-entry input:focus{
+    border-color:rgba(139,92,246,.5);
+    background:rgba(255,255,255,.05);
+    box-shadow:0 0 0 4px rgba(139,92,246,.12);
+  }
+  .field input::placeholder, .link-entry input::placeholder{color:var(--text-dimmer)}
+
+  .btn-primary{
+    width:100%;padding:13px;
+    background:var(--grad);
+    border:none;border-radius:12px;
+    color:#fff;font-family:inherit;font-size:15px;font-weight:600;
+    cursor:pointer;
+    box-shadow:0 10px 28px -10px rgba(99,102,241,.7);
+    transition:filter .2s,transform .15s;
+  }
+  .btn-primary:hover{filter:brightness(1.1)}
+  .btn-primary:active{transform:scale(.98)}
+
+  .btn-ghost{
+    padding:10px 14px;
+    background:transparent;
+    border:1px dashed var(--border-hi);
+    border-radius:10px;
+    color:var(--text-dim);
+    font-family:inherit;font-size:13px;font-weight:500;
+    cursor:pointer;width:100%;
+    transition:background .2s,color .2s,border-color .2s;
+  }
+  .btn-ghost:hover{background:var(--surface);color:var(--text)}
+
+  /* ---------- Dashboard ---------- */
+  #dash-view{display:none}
+  .dash{max-width:1200px;margin:0 auto;padding:32px 24px 80px}
+  .dash-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:32px;gap:16px;flex-wrap:wrap;
+  }
+  .dash-header .brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:22px;font-weight:700;letter-spacing:-.02em;
+    background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-decoration:none;
+  }
+  .dash-header .actions{display:flex;gap:10px}
+  .link-btn{
+    padding:9px 14px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text-dim);text-decoration:none;
+    font-size:13px;font-weight:500;font-family:inherit;
+    cursor:pointer;
+    transition:background .2s,color .2s,border-color .2s;
+  }
+  .link-btn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border-hi)}
+
+  .dash-grid{
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:32px;
+    align-items:start;
+  }
+  @media (max-width:900px){.dash-grid{grid-template-columns:1fr}}
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:24px;
+    backdrop-filter:blur(10px);
+  }
+  .panel h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:18px;margin-bottom:20px;letter-spacing:-.01em;
+  }
+  .panel h2 .count{
+    font-size:13px;color:var(--text-dimmer);font-weight:500;
+    margin-left:8px;font-family:'Inter',sans-serif;
+  }
+
+  /* Link rows */
+  .link-entry{
+    display:grid;
+    grid-template-columns:1fr 1.4fr auto;
+    gap:8px;margin-bottom:8px;
+    animation:rise .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .link-entry .remove{
+    width:42px;padding:0;
+    background:rgba(239,68,68,.1);
+    border:1px solid rgba(239,68,68,.25);
+    border-radius:10px;
+    color:#f87171;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s;
+  }
+  .link-entry .remove:hover{background:rgba(239,68,68,.2)}
+  @media (max-width:640px){
+    .link-entry{grid-template-columns:1fr}
+    .link-entry .remove{width:100%;height:38px}
+  }
+
+  /* Product list */
+  .prod-item{
+    display:flex;align-items:center;gap:14px;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:10px;
+    transition:border-color .2s,background .2s;
+  }
+  .prod-item:hover{border-color:var(--border-hi);background:var(--surface-2)}
+  .prod-thumb{
+    width:56px;height:56px;border-radius:10px;overflow:hidden;
+    background:#16161f;flex-shrink:0;
+  }
+  .prod-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .prod-info{flex:1;min-width:0}
+  .prod-info h4{
+    font-size:14px;font-weight:600;margin-bottom:4px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .prod-info p{font-size:12px;color:var(--text-dimmer)}
+  .prod-del{
+    width:36px;height:36px;border-radius:10px;
+    background:rgba(239,68,68,.1);
+    border:1px solid rgba(239,68,68,.25);
+    color:#f87171;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s;
+  }
+  .prod-del:hover{background:rgba(239,68,68,.25)}
+  .empty-mini{
+    text-align:center;padding:32px 16px;color:var(--text-dimmer);font-size:14px;
+  }
+
+  /* Toasts */
+  #toasts{
+    position:fixed;bottom:24px;right:24px;
+    display:flex;flex-direction:column;gap:10px;
+    z-index:200;pointer-events:none;
+  }
+  .toast{
+    padding:12px 18px;
+    background:rgba(20,20,30,.95);
+    border:1px solid var(--border-hi);
+    border-radius:12px;
+    font-size:13px;font-weight:500;color:var(--text);
+    backdrop-filter:blur(20px);
+    box-shadow:0 20px 40px -10px rgba(0,0,0,.6);
+    opacity:0;transform:translateY(12px);
+    transition:opacity .3s,transform .3s;
+  }
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast.success{border-color:rgba(16,185,129,.4)}
+  .toast.error{border-color:rgba(239,68,68,.4)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN VIEW -->
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <div class="lock-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    </div>
+    <h1>Admin Access</h1>
+    <p class="sub">Enter your password to manage products.</p>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" onclick="login()">Unlock</button>
+  </div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div id="dash-view">
+  <div class="dash">
+    <div class="dash-header">
+      <a href="index.html" class="brand">LUXE Admin</a>
+      <div class="actions">
+        <a href="index.html" class="link-btn">View store →</a>
+        <button class="link-btn" onclick="logout()">Log out</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Form panel -->
+      <div class="panel">
+        <h2>Add product</h2>
+        <div class="field">
+          <label>Product name</label>
+          <input type="text" id="p-name" placeholder="Wireless Headphones">
+        </div>
+        <div class="field">
+          <label>Image URL</label>
+          <input type="text" id="p-image" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Affiliate links</label>
+          <div id="links"></div>
+          <button class="btn-ghost" onclick="addLinkRow()" style="margin-top:8px">+ Add another link</button>
+        </div>
+        <button class="btn-primary" onclick="saveProduct()" style="margin-top:16px">Save product</button>
+      </div>
+
+      <!-- Products panel -->
+      <div class="panel">
+        <h2>Your products <span class="count" id="count">0</span></h2>
+        <div id="product-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+  const ADMIN_PASSWORD = 'admin123'; // ← CHANGE THIS
+  const STORAGE_KEY = 'myProducts';
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function toast(msg, type='success'){
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    document.getElementById('toasts').appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => {
+      el.classList.remove('show');
+      setTimeout(() => el.remove(), 300);
+    }, 2600);
+  }
+
+  /* ---------- Auth ---------- */
+  function login(){
+    const val = document.getElementById('password').value;
+    if (val === ADMIN_PASSWORD){
+      sessionStorage.setItem('adminAuthed', '1');
+      showDash();
+    } else {
+      const card = document.querySelector('.login-card');
+      card.classList.remove('shake');
+      void card.offsetWidth;
+      card.classList.add('shake');
+      toast('Wrong password', 'error');
+    }
+  }
+
+  function logout(){
+    sessionStorage.removeItem('adminAuthed');
+    location.reload();
+  }
+
+  function showDash(){
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('dash-view').style.display = 'block';
+    if (document.querySelectorAll('.link-entry').length === 0) addLinkRow();
+    renderProducts();
+  }
+
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  if (sessionStorage.getItem('adminAuthed') === '1') showDash();
+
+  /* ---------- Link rows ---------- */
+  function addLinkRow(platform='', url=''){
+    const row = document.createElement('div');
+    row.className = 'link-entry';
+    row.innerHTML = `
+      <input type="text" class="platform-input" placeholder="Platform (Amazon)" value="${esc(platform)}">
+      <input type="text" class="url-input" placeholder="https://..." value="${esc(url)}">
+      <button class="remove" type="button" title="Remove">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>`;
+    row.querySelector('.remove').addEventListener('click', () => row.remove());
+    document.getElementById('links').appendChild(row);
+  }
+
+  /* ---------- Save / delete ---------- */
+  function saveProduct(){
+    const name = document.getElementById('p-name').value.trim();
+    const image = document.getElementById('p-image').value.trim();
+
+    const links = [];
+    document.querySelectorAll('.link-entry').forEach(row => {
+      const platform = row.querySelector('.platform-input').value.trim();
+      const url = row.querySelector('.url-input').value.trim();
+      if (platform && url) links.push({ platform, url });
+    });
+
+    if (!name || !image || links.length === 0){
+      toast('Fill name, image, and at least one link', 'error');
+      return;
+    }
+
+    const products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    products.push({ name, image, links });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+    toast('Product added');
+    document.getElementById('p-name').value = '';
+    document.getElementById('p-image').value = '';
+    document.getElementById('links').innerHTML = '';
+    addLinkRow();
+    renderProducts();
+  }
+
+  function deleteProduct(i){
+    if (!confirm('Delete this product?')) return;
+    const products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    products.splice(i, 1);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+    toast('Product deleted');
+    renderProducts();
+  }
+
+  /* ---------- Render ---------- */
+  function renderProducts(){
+    const products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    document.getElementById('count').textContent = products.length;
+    const wrap = document.getElementById('product-list');
+
+    if (products.length === 0){
+      wrap.innerHTML = '<div class="empty-mini">No products yet. Add one using the form.</div>';
+      return;
+    }
+
+    wrap.innerHTML = products.map((p, i) => `
+      <div class="prod-item">
+        <div class="prod-thumb">
+          <img src="${esc(p.image)}" alt="" onerror="this.style.display='none'">
+        </div>
+        <div class="prod-info">
+          <h4>${esc(p.name)}</h4>
+          <p>${p.links.length} link${p.links.length !== 1 ? 's' : ''}</p>
+        </div>
+        <button class="prod-del" onclick="deleteProduct(${i})" title="Delete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>`).join('');
+  }
+</script>
+</body>
+</html>
